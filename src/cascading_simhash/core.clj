@@ -1,0 +1,1 @@
+(ns cascading-simhash.core)
