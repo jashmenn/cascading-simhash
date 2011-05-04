@@ -1,13 +1,11 @@
 # cascading-simhash
 
-FIXME: write description
+http://knol.google.com/k/simple-simhashing
 
 ## Usage
 
 FIXME: write
 
-## License
+## Author
 
-Copyright (C) 2010 FIXME
-
-Distributed under the Eclipse Public License, the same as Clojure.
+Nate Murray 2011
