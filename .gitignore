@@ -1,0 +1,8 @@
+pom.xml
+*jar
+lib
+classes
+*.ipr
+*.iml
+*.iws
+.DS_Store
