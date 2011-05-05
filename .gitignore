@@ -6,3 +6,5 @@ classes
 *.iml
 *.iws
 .DS_Store
+.emacs.desktop
+.emacs.desktop.lock
