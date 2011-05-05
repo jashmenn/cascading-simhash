@@ -19,11 +19,9 @@ package simhash;
 import java.util.Iterator;
 
 /**
- * An interface for filtering {@link File} objects based on their names
- * or the directory they reside in.
- * 
+ * A base class for tokenizing 
  */
-public interface Tokenizer<T> {
+public interface ITokenizer<T> {
 
     /**
      * Indicates if a specific filename matches this filter.
