@@ -5,14 +5,14 @@
 
   we're writing a public function simHash
 
-  it will take a:
+  it will take a
   Tap source
   Tap output
   Fields wanted
   a tokenizer
   int restrictiveness
 
-  what its going to do is:
+  what its going to do is
   read the tap
   for each record
   tokenize the body
@@ -22,5 +22,5 @@
   XOR the hashes
   return the tuple
 
-    public Flow simhashTap source, Tap output, Fields wantedFields, Iterator<String>, int restrictiveness 
+  public Flow simhashTap source, Tap output, Fields wantedFields, Iterator<String>, int restrictiveness 
   )
