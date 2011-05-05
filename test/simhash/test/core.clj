@@ -3,13 +3,17 @@
   (:use 
    [simhash core util]
    [cascalog api testing]
-   [clojure.test])
+   [clojure.test]
+   [clojure.contrib greatest-least])
   (:require 
    [simhash [taps :as t] [ops :as ops]]
-   [cascalog [workflow :as w] [vars :as v] [ops :as c]])
+   [cascalog [workflow :as w] [vars :as v] [ops :as c]]
+   [clojure.contrib.str-utils :as stu])
   (:import 
-   [java.util StringTokenizer])
-  (:gen-class))
+   [java.util StringTokenizer PriorityQueue]
+   [java.security MessageDigest]
+   [java.math BigInteger])
+   )
 
 (def testfile "test-resources/test-documents.txt")
 
@@ -19,14 +23,42 @@
       (ops/re-split-op [#"\t" 2] ?line :> ?docid ?body)
       (:distinct false)))
 
-(defn tokenize [body]
-  (enumeration-seq (StringTokenizer. body)))
+(defn tokenize 
+  "tokenize into bi-grams (sliding window)"
+  [body]
+  (map
+   (fn [tokens] (stu/str-join " " tokens))
+   (partition 2 1 (enumeration-seq (StringTokenizer. body)))))
+
 ; --
 
+(defn find-n-minhashes
+  ([n tokens] 
+     (find-n-minhashes n tokens (PriorityQueue. (inc n)) nil nil))
+  ([n tokens results min max]
+     (if (seq tokens) 
+       (let [token (first tokens)
+             token-hash (sha1-bigint token)
+             new-min (apply least    (filter identity [min token-hash]))
+             new-max (apply greatest (filter identity [max token-hash]))
+             changed (or (not (= min new-min)) (not (= max new-max)))]
+         (if changed
+           )
+         (recur n (rest tokens) results new-min new-max))
+       results ;; todo modify results
+       )))
+
+(comment
+
+  (find-n-minhashes 2 (seq (tokenize "hello my dog has fleas")))
+
+  )
+
 (defn minhash+ [body r tokenizer]
-  (map
-   (fn [t] (prn t) t)
-   (iterator-seq (.tokenize tokenizer body)))
+  (doall
+   (map
+    (fn [t] (prn t) t)
+    (seq (tokenizer body))))
   "4")
 
 (w/defmapop [minhash-op [r tokenizer]] [body]
@@ -42,7 +74,8 @@
 
   (.complete 
    (simhash 
-    (test-source testfile) (stdout) 1 tokenize))
+    (test-source testfile) (stdout) 1 
+    #(tokenize %)))
 
   (?<- 
    (stdout)

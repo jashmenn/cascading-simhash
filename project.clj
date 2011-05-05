@@ -15,4 +15,4 @@
   :target-dir "build"
   :java-source-path "src/java"
   :source-path "src/clj"
-  :aot [simhash.test.core])
+  :aot [])
