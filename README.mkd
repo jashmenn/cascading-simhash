@@ -1,10 +1,20 @@
 # cascading-simhash
 
-http://knol.google.com/k/simple-simhashing
+see: http://knol.google.com/k/simple-simhashing
 
-## Usage
+## Usage Notes (in progress)
 
-FIXME: write
+    public Flow simhash(Tap source, Tap output, Fields wantedFields,
+    Iterator<String>, int restrictiveness)
+    ...
+
+    pass in a simhash.Tokenizer which given a string returns a Set of
+    tokens. 
+
+    iterator, which will return Strings of whatever you want 
+    e.g. Tokenizer that will tokenize HTML
+
+
 
 ## Author
 
