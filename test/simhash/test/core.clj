@@ -12,8 +12,8 @@
   (:import 
    [java.util StringTokenizer PriorityQueue]
    [java.security MessageDigest]
-   [java.math BigInteger])
-   )
+   [java.math BigInteger]
+   [java.util TreeMap]))
 
 (def testfile "test-resources/test-documents.txt")
 
@@ -32,21 +32,36 @@
 
 ; --
 
+(defn- remove-max-to [col size]
+  (while (> (.size col) size)
+    (.remove col (.lastKey col)))
+  col)
+
+(defn- maybe-store 
+"we don't need to store every hash, just the n least
+if results has less than n elements, insert this element
+if token-hash is less than max(results) then
+  insert token-hash and remove the max
+returns results, possibly modified"
+  [n results token-hash]
+  (if (or (< (.size results) n)
+          (> (.lastKey results) token-hash))
+    (doto results
+      (.put token-hash true)
+      (remove-max-to n))))
+
+(defn- xor-keyset [results]
+  (let [keys (seq (.keySet results))]
+   (reduce #(.xor %1 %2) (first keys) (rest keys))))
+
 (defn find-n-minhashes
   ([n tokens] 
-     (find-n-minhashes n tokens (PriorityQueue. (inc n)) nil nil))
-  ([n tokens results min max]
+     (find-n-minhashes n tokens (TreeMap.)))
+  ([n tokens results]
      (if (seq tokens) 
-       (let [token (first tokens)
-             token-hash (sha1-bigint token)
-             new-min (apply least    (filter identity [min token-hash]))
-             new-max (apply greatest (filter identity [max token-hash]))
-             changed (or (not (= min new-min)) (not (= max new-max)))]
-         (if changed
-           )
-         (recur n (rest tokens) results new-min new-max))
-       results ;; todo modify results
-       )))
+       (recur n (rest tokens) 
+         (maybe-store n results (sha1-bigint (first tokens))))
+       (xor-keyset results))))
 
 (comment
 
