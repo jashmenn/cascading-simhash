@@ -30,13 +30,29 @@ import cascalog.StdoutTap;
 import clojure.lang.AFn;
 import simhash.Simhash;
 
-// lein uberjar
-// lein classpath > classpath
-// java -cp `cat classpath`:build/cascading-simhash-1.0.0-SNAPSHOT-standalone.jar simhash.examples.SimpleSimhash "test-resources/test-documents.txt"
+/**
+ * Simple Simhash - an example of how to use Simhash
+ *
+ * To run this example:
+ *   lein uberjar
+ *   lein classpath > classpath
+ *   java -cp `cat classpath`:build/cascading-simhash-1.0.0-SNAPSHOT-standalone.jar simhash.examples.SimpleSimhash "test-resources/test-documents.txt"
+ **/
 public class SimpleSimhash {
   private static final Logger LOG = Logger.getLogger( SimpleSimhash.class );
 
+  /**
+   * Create a tokenizer that is a subclass of clojure.lang.AFn and
+   * implements invoke(Object body)
+   **/
   public static class Tokenizer extends AFn {
+
+    /**
+     * Your tokenization logic goes here
+     *
+     * @param String body
+     * @return something seq-able
+     */
     public Object invoke(Object body) throws Exception {
       String b = (String)body;
       return b.split(" ");

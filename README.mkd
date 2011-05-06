@@ -2,6 +2,15 @@
 
 see: http://knol.google.com/k/simple-simhashing
 
+## Running Java Example
+
+Take a look at `src/java/simhash/examples/SimpleSimhash.java` for an
+example of how to use this package from java.
+
+    lein uberjar
+    lein classpath > classpath
+    java -cp `cat classpath`:build/cascading-simhash-1.0.0-SNAPSHOT-standalone.jar simhash.examples.SimpleSimhash "test-resources/test-documents.txt"
+
 ## Usage Notes (in progress)
 
     public Flow simhash(Tap source, Tap output, Fields wantedFields,
