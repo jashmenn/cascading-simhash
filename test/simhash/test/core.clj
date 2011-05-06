@@ -30,78 +30,29 @@
    (fn [tokens] (stu/str-join " " tokens))
    (partition 2 1 (enumeration-seq (StringTokenizer. body)))))
 
-; --
+(deftest minhash-finds-dog-cluster-at-one
+  (test?- 
+   [["13fa516911cb3688e24f5624714487ff6852a7e1" "DocD" "see spot run"]
+    ["96b52e0356de4547e75250020a38ad0fc233ce3f" "DocA" "my dog has fleas"]
+    ["96b52e0356de4547e75250020a38ad0fc233ce3f" "DocB" "my dog has fleas"]
+    ["96b52e0356de4547e75250020a38ad0fc233ce3f" "DocC" "my dog has hair"]]
+   (simhash-q (test-source testfile) 1 tokenize))) 
 
-(defn- remove-max-to [col size]
-  (while (> (.size col) size)
-    (.remove col (.lastKey col)))
-  col)
-
-(defn- maybe-store 
-"we don't need to store every hash, just the n least
-if results has less than n elements, insert this element
-if token-hash is less than max(results) then
-  insert token-hash and remove the max
-returns results, possibly modified"
-  [n results token-hash]
-  (if (or (< (.size results) n)
-          (> (.lastKey results) token-hash))
-    (doto results
-      (.put token-hash true)
-      (remove-max-to n))
-    results))
-
-(defn- xor-keyset [results]
-  (let [keys (seq (.keySet results))]
-   (reduce #(.xor %1 %2) (first keys) (rest keys))))
-
-(defn minhash
-  ([n tokens] 
-     (minhash n tokens (TreeMap.)))
-  ([n tokens results]
-     (if (seq tokens) 
-       (recur n (rest tokens) 
-         (maybe-store n results (sha1-bigint (first tokens))))
-       (xor-keyset results))))
+(deftest minhash-finds-fleas-cluster-at-two
+  (test?- 
+   [["302800f65127301b7f16ac09c13cac7bd491db05" "DocA" "my dog has fleas"]
+    ["302800f65127301b7f16ac09c13cac7bd491db05" "DocB" "my dog has fleas"]
+    ["6acb9024e2522478f6de07b4766b34e72c4e40ec" "DocD" "see spot run"]
+    ["9f7efc7e7bb4e29d9a508d32985b64cba3edffde" "DocC" "my dog has hair"]]
+   (simhash-q (test-source testfile) 2 tokenize))) 
 
 (comment
-
-  (minhash 2 (seq (tokenize "hello my dog has fleas")))
-
-  )
-
-(defn minhash+ [body r tokenizer]
-  (minhash r (tokenizer body)))
-
-(comment
-
-
-  (time (minhash+ (slurp testfile) 2 tokenize))
-
-  )
-
-(w/defmapop [minhash-op [r tokenizer]] [body]
-  (minhash+ body r tokenizer))
-
-(defn simhash [source tap-out r tokenizer]
-  (compile-flow "simhash" tap-out
-    (<- [?minhash ?docid ?body]
-        (source ?docid ?body)
-        (minhash-op [r tokenizer] ?body :> ?minhash))))
-
-(comment
+  "here are some other ways you can run this:"
 
   (.complete 
    (simhash 
-    (test-source testfile) (stdout) 1 
+    (test-source testfile) (stdout) 2 
     #(tokenize %)))
 
-  (?<- 
-   (stdout)
-   [?docid ?body]
-   ((test-source testfile) ?docid ?body))
-
-  )
-
-(deftest replace-me ;; FIXME: write
-  (is false "No tests have been written."))
+  (minhash 2 (seq (tokenize "hello my dog has fleas")))
+  (time (minhash+ (slurp testfile) 2 tokenize)))
