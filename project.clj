@@ -16,7 +16,8 @@
   :target-dir "build"
   :java-source-path "src/java"
   :source-path "src/clj"
-  :aot [simhash.core])
+  :aot [simhash.core
+        simhash.examples.simple])
 
 ;; examples.SimpleSimhash depends on the gen-class in simhash.core,
 ;; but lein *always* does a `lein javac` before a `lein compile` so

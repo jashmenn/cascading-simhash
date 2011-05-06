@@ -18,7 +18,7 @@ example of how to use this package from java.
     ...
 
     pass in a simhash.Tokenizer which given a string returns a Set of
-    tokens. 
+    token. 
 
     iterator, which will return Strings of whatever you want 
     e.g. Tokenizer that will tokenize HTML

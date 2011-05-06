@@ -10,7 +10,7 @@
    [cascalog [workflow :as w] [vars :as v] [ops :as c]]
    [clojure.contrib.str-utils :as stu])
   (:import 
-   [java.util StringTokenizer PriorityQueue]
+   [java.util StringTokenizer]
    [java.security MessageDigest]
    [java.math BigInteger]
    [java.util TreeMap]))

@@ -19,9 +19,7 @@ package simhash.examples;
 
 import org.apache.log4j.Logger;
 import cascading.flow.Flow;
-import cascading.operation.regex.RegexSplitter;
 import cascading.pipe.*;
-import cascading.scheme.TextLine;
 import cascading.scheme.TextDelimited;
 import cascading.tap.Hfs;
 import cascading.tap.Tap;
