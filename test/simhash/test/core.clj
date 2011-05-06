@@ -48,15 +48,16 @@ returns results, possibly modified"
           (> (.lastKey results) token-hash))
     (doto results
       (.put token-hash true)
-      (remove-max-to n))))
+      (remove-max-to n))
+    results))
 
 (defn- xor-keyset [results]
   (let [keys (seq (.keySet results))]
    (reduce #(.xor %1 %2) (first keys) (rest keys))))
 
-(defn find-n-minhashes
+(defn minhash
   ([n tokens] 
-     (find-n-minhashes n tokens (TreeMap.)))
+     (minhash n tokens (TreeMap.)))
   ([n tokens results]
      (if (seq tokens) 
        (recur n (rest tokens) 
@@ -65,16 +66,19 @@ returns results, possibly modified"
 
 (comment
 
-  (find-n-minhashes 2 (seq (tokenize "hello my dog has fleas")))
+  (minhash 2 (seq (tokenize "hello my dog has fleas")))
 
   )
 
 (defn minhash+ [body r tokenizer]
-  (doall
-   (map
-    (fn [t] (prn t) t)
-    (seq (tokenizer body))))
-  "4")
+  (minhash r (tokenizer body)))
+
+(comment
+
+
+  (time (minhash+ (slurp testfile) 2 tokenize))
+
+  )
 
 (w/defmapop [minhash-op [r tokenizer]] [body]
   (minhash+ body r tokenizer))
