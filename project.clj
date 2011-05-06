@@ -26,9 +26,11 @@
 ;; hook in to leiningen.compile and call clojure.core/compile on
 ;; simhash.core before lein javac compiles the java classes. ew.
 (use '[leiningen.core :only [prepend-tasks]]
-     '[leiningen.compile :only [eval-in-project]])
+     '[leiningen.compile :only [eval-in-project]]
+     '[clojure.java.io :only [file]])
 (prepend-tasks 
  #'leiningen.compile/compile
  (fn [project] 
+   (.mkdir (file (:compile-path project)))
    (binding [leiningen.compile/*skip-auto-compile* true]
      (eval-in-project project `(clojure.core/compile 'simhash.core)))))
