@@ -15,13 +15,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package simash.examples;
+package simhash.examples;
 
 import org.apache.log4j.Logger;
 import cascading.flow.Flow;
 import cascading.operation.regex.RegexSplitter;
 import cascading.pipe.*;
 import cascading.scheme.TextLine;
+import cascading.scheme.TextDelimited;
 import cascading.tap.Hfs;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
@@ -29,30 +30,28 @@ import cascalog.StdoutTap;
 import clojure.lang.AFn;
 import simhash.Simhash;
 
-// java -jar myjar simhash.examples.Simplesimhash "test-resources/test-documents.txt"
+// lein uberjar
+// lein classpath > classpath
+// java -cp `cat classpath`:build/cascading-simhash-1.0.0-SNAPSHOT-standalone.jar simhash.examples.SimpleSimhash "test-resources/test-documents.txt"
 public class SimpleSimhash {
-    private static final Logger LOG = Logger.getLogger( SimpleSimhash.class );
+  private static final Logger LOG = Logger.getLogger( SimpleSimhash.class );
 
-    public static void main( String[] args ) {
-      Tap inputTap = new Hfs( new TextLine( new Fields("line") ), args[0] );
-      Tap outputTap = new StdoutTap();
-
-      // parse our input tap. note, we could have used TextDelimited
-      // for the input scheme, but I want to show how the operation
-      // can be used with a Pipe as well
-      Pipe pipe = new Pipe("simhash pipe");
-      pipe = new Each(pipe, new Fields("line"), 
-                      new RegexSplitter(new Fields("docid", "body"), "\\t"));
-
-      // create a tokenizer IFn
-      AFn tokenizer = new AFn() {
-          public Object invoke(Object body) throws Exception {
-            return "x";
-          }
-      };
-
-      // create the flow
-      Flow simhashFlow = Simhash.simhash(pipe, outputTap, 2, tokenizer);
-      simhashFlow.complete(); // or add to your Cascade, etc
+  public static class Tokenizer extends AFn {
+    public Object invoke(Object body) throws Exception {
+      String b = (String)body;
+      return b.split(" ");
     }
+  }
+
+  public static void main( String[] args ) {
+    Tap inputTap = new Hfs( new TextDelimited( 
+                                new Fields("docid", "body"), "	" ),
+                            args[0] );
+    Tap outputTap = new StdoutTap();
+
+    // create the flow
+    Flow simhashFlow = Simhash.simhash(inputTap, outputTap, 2, 
+                                       SimpleSimhash.Tokenizer.class);
+    simhashFlow.complete(); // or add to your Cascade, etc
+  }
 }

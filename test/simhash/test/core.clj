@@ -50,7 +50,7 @@
   "here are some other ways you can run this:"
 
   (.complete 
-   (simhash 
+   (-simhash 
     (test-source testfile) (stdout) 2 
     #(tokenize %)))
 

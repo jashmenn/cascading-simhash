@@ -1,7 +1,7 @@
 
 (ns simhash.core
   (:use 
-   [simhash core util]
+   [simhash util]
    [cascalog api testing]
    [clojure.test]
    [clojure.contrib greatest-least])
@@ -13,7 +13,7 @@
    [java.util TreeMap])
   (:gen-class
    :name simhash.Simhash
-   :methods [#^{:static true} [simhash [Object Object int clojure.lang.AFn] cascading.flow.Flow]]))
+   :methods [#^{:static true} [simhash [Object Object int Object] cascading.flow.Flow]]))
 
 (defn- remove-max-to [col size]
   (while (> (.size col) size)
@@ -47,9 +47,12 @@ returns results, possibly modified"
          (maybe-store n results (sha1-bigint (first tokens))))
        (xor-keyset results))))
 
+(defn maybe-make-instance [thing]
+  (if (class? thing) (.newInstance thing) thing))
+
 (defn minhash+ [body r tokenizer]
   (bigint-to-hex-string
-   (minhash r (tokenizer body))))
+   (minhash r ((maybe-make-instance tokenizer) body))))
 
 (w/defmapop [minhash-op [r tokenizer]] [body]
   (minhash+ body r tokenizer))
