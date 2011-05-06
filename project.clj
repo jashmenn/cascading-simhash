@@ -1,3 +1,4 @@
+
 (defproject cascading-simhash "1.0.0-SNAPSHOT"
   :description "Calculate simple simhashing in Hadoop"
   :dependencies 
@@ -15,4 +16,19 @@
   :target-dir "build"
   :java-source-path "src/java"
   :source-path "src/clj"
-  :aot [])
+  :aot [simhash.core])
+
+;; examples.SimpleSimhash depends on the gen-class in simhash.core,
+;; but lein *always* does a `lein javac` before a `lein compile` so
+;; lein compile always fails (because lein javac can't find
+;; simhash.core).
+;;  
+;; hook in to leiningen.compile and call clojure.core/compile on
+;; simhash.core before lein javac compiles the java classes. ew.
+(use '[leiningen.core :only [prepend-tasks]]
+     '[leiningen.compile :only [eval-in-project]])
+(prepend-tasks 
+ #'leiningen.compile/compile
+ (fn [project] 
+   (binding [leiningen.compile/*skip-auto-compile* true]
+     (eval-in-project project `(clojure.core/compile 'simhash.core)))))

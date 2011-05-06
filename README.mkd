@@ -15,7 +15,15 @@ see: http://knol.google.com/k/simple-simhashing
     e.g. Tokenizer that will tokenize HTML
 
 
+    write something in java that will use it
+
+    # to compile
+    lein classpath > classpath
+    java -cp `cat classpath` -Dclojure.compile.path=build/classes clojure.lang.Compile simhash.core
+    lein compile
+
 
 ## Author
 
 Nate Murray 2011
+

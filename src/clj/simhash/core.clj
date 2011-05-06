@@ -10,7 +10,10 @@
    [cascalog [workflow :as w] [vars :as v] [ops :as c]]
    [clojure.contrib.str-utils :as stu])
   (:import 
-   [java.util TreeMap]))
+   [java.util TreeMap])
+  (:gen-class
+   :name simhash.Simhash
+   :methods [#^{:static true} [simhash [Object Object int clojure.lang.AFn] cascading.flow.Flow]]))
 
 (defn- remove-max-to [col size]
   (while (> (.size col) size)
@@ -56,7 +59,8 @@ returns results, possibly modified"
         (source ?docid ?body)
         (minhash-op [r tokenizer] ?body :> ?minhash)))
 
-(defn simhash [source tap-out r tokenizer]
+(defn -simhash 
+  [source tap-out r tokenizer]
   (compile-flow "simhash" tap-out
                 (simhash-q source r tokenizer)))
 
