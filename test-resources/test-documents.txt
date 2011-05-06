@@ -2,4 +2,4 @@ DocA	my dog has fleas
 DocB	my dog has fleas
 DocC	my dog has hair
 DocD	see spot run
-DocE    We hold these truths
+DocE	We hold these truths
