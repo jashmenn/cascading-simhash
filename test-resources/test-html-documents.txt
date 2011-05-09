@@ -1,0 +1,4 @@
+pinecone	<html lang="en"> <head> <title>a pinecone haiku</title> </head> <body> <h1>Part 1</h1> <p> vision through the boughs<br/> pinecones decorating trees<br/> winter slowly fades </p> </body> </html>
+unicorns	<html lang="en"> <head> <title>a unicorn haiku</title> </head> <body> <h1>Part 1</h1> <p> Beneath the gold stars, <br/> Piercing the dark of the land, <br/> Our bright horns shimmer. </p> </body> </html>
+rainbows	<html lang="en"> <head> <title>a rainbow haiku</title> </head> <body> <h1>Part 1</h1> <p> Beneath the gold stars, <br/> Piercing the funny rainbow, <br/> Our bright horns shimmer. </p> </body> </html>
+money	<html lang="en"> <head> <title>find the true meaning of christmas</title> </head> <body> <p> win money, money, money! <br/> enter our contest and celebrate with some cold hard cash </p> </body> </html>
