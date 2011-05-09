@@ -51,10 +51,3 @@ public class HtmlSimhash {
     simhashFlow.complete(); // or add to your Cascade, etc
   }
 }
-
-/*
-  88d04488c452260207cd4d171084a5b8a44bbab0
-  8cb836a5f1b8e305608a586c23828a02e35b8468
-
-  k
- */
