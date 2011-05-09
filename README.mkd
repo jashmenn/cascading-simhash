@@ -1,8 +1,35 @@
 # cascading-simhash
 
-see: http://knol.google.com/k/simple-simhashing
+Say you have a large corpus of web documents and you want to group
+them together by some notion of "similarity". For instance, we may
+want to detect plagiarism or find content that appears on multiple
+places on a site. In this scenario it is impractical to do a pairwise
+comparison of all documents. Fortunately, we can use simhashing.
 
-## Running Java Example
+Broadly speaking, simhashing is a algorithm that calculates a "group
+id" (the minimum hash, or <em>minhash</em>) from the content. Because
+the minhash for an item is calculated independently of the other items
+in the set, minhashing is an ideal candidate for MapReduce.
+
+
+* See: http://www.xcombinator.com/2011/05/09/cascading-simhash-a-library-to-cluster-by-minhashes-in-hadoop/ for an introduction to this library.
+* See: http://knol.google.com/k/simple-simhashing for more on simhashing.
+
+## Dependencies 
+
+leiningen
+
+    [cascading-simhash "1.0.0-SNAPSHOT"]
+
+maven
+
+    <dependency>
+      <groupId>cascading-simhash</groupId>
+      <artifactId>cascading-simhash</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+
+## Running the Java Example
 
 Take a look at `src/java/simhash/examples/SimpleSimhash.java` for an
 example of how to use this package from java.
@@ -11,21 +38,31 @@ example of how to use this package from java.
     lein classpath > classpath
     java -cp `cat classpath`:build/cascading-simhash-1.0.0-SNAPSHOT-standalone.jar simhash.examples.SimpleSimhash "test-resources/test-documents.txt"
 
-## Usage Notes (in progress)
+## Running the Clojure Example
 
-    public Flow simhash(Tap source, Tap output, Fields wantedFields,
-    Iterator<String>, int restrictiveness)
-    ...
+See: `src/clj/simhash/examples/bigrams.clj`
 
-    pass in a simhash.Tokenizer which given a string returns a Set of
-    token. 
-
-    iterator, which will return Strings of whatever you want 
-    e.g. Tokenizer that will tokenize HTML
-
-    write something in java that will use it
+  lein compile
+  lein run -m simhash.examples.bigrams test-resources/test-documents.txt 
 
 ## Author
 
 Nate Murray 2011
+
+## License
+
+    Copyright 2010 Nate Murray
+ 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+ 
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+ 
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
