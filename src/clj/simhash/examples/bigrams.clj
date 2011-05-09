@@ -19,15 +19,10 @@ Note two things about this example:
 (ns simhash.examples.bigrams
   (:use 
    [simhash core util]
-   [cascalog api testing]
-   [clojure.test]
-   [clojure.contrib greatest-least])
+   [cascalog api testing])
   (:require 
    [simhash [taps :as t] [ops :as ops]]
-   [cascalog [workflow :as w] [vars :as v] [ops :as c]]
    [clojure.contrib.str-utils :as stu])
-  (:import
-   [java.util StringTokenizer])
   (:gen-class))
 
 (defn my-source [path]
@@ -41,7 +36,7 @@ Note two things about this example:
   [body]
   (map
    (fn [tokens] (stu/str-join " " tokens))
-   (partition 2 1 (enumeration-seq (StringTokenizer. body)))))
+   (partition 2 1 (stu/re-split #"\s+" body))))
 
 (defn -main [& args]
   (?- (stdout) 

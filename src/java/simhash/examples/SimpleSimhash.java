@@ -59,12 +59,13 @@ public class SimpleSimhash {
 
   public static void main( String[] args ) {
     Tap inputTap = new Hfs( new TextDelimited( 
-                                new Fields("docid", "body"), "	" ),
+                                new Fields("docid", "body"), "\t" ),
                             args[0] );
     Tap outputTap = new StdoutTap();
 
     // create the flow
-    Flow simhashFlow = Simhash.simhash(inputTap, outputTap, 2, 
+    Flow simhashFlow = Simhash.simhash(inputTap, outputTap,
+                                       2, // combine n-th lowest minhashes (e.g. 2)
                                        SimpleSimhash.Tokenizer.class);
     simhashFlow.complete(); // or add to your Cascade, etc
   }
