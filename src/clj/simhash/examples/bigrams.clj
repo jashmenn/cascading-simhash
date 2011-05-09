@@ -5,7 +5,7 @@ An example of how to use simhash with cascalog.
 Usage:
 
   lein compile
-  lein run -m simhash.examples.simple test-resources/test-documents.txt 
+  lein run -m simhash.examples.bigrams test-resources/test-documents.txt 
 
 Note two things about this example:
 
@@ -16,7 +16,7 @@ Note two things about this example:
     tokenizer.
 
 ")
-(ns simhash.examples.simple
+(ns simhash.examples.bigrams
   (:use 
    [simhash core util]
    [cascalog api testing]
@@ -46,4 +46,5 @@ Note two things about this example:
 (defn -main [& args]
   (?- (stdout) 
       (simhash-q (my-source (first args))
-                 2 tokenize)))
+                 2 ;; number of minhashes
+                 tokenize)))

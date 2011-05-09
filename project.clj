@@ -17,7 +17,8 @@
   :java-source-path "src/java"
   :source-path "src/clj"
   :aot [simhash.core
-        simhash.examples.simple])
+        simhash.examples.bigrams
+        simhash.tokenizers.html-text])
 
 ;; examples.SimpleSimhash depends on the gen-class in simhash.core,
 ;; but lein *always* does a `lein javac` before a `lein compile` so
@@ -34,4 +35,7 @@
  (fn [project] 
    (.mkdir (file (:compile-path project)))
    (binding [leiningen.compile/*skip-auto-compile* true]
-     (eval-in-project project `(clojure.core/compile 'simhash.core)))))
+     (eval-in-project project 
+                      `(doall (map
+                               (fn [lib#] (clojure.core/compile lib#))
+                               ['simhash.core 'simhash.tokenizers.html-text]))))))
