@@ -13,7 +13,7 @@ in the set, minhashing is an ideal candidate for MapReduce.
 
 
 * See: http://www.xcombinator.com/2011/05/09/cascading-simhash-a-library-to-cluster-by-minhashes-in-hadoop/ for an introduction to this library.
-* See: http://knol.google.com/k/simple-simhashing for more on simhashing.
+* See: http://www.cnblogs.com/zhenjing/articles/simhashing.html for more on simhashing.
 
 ## Dependencies 
 
